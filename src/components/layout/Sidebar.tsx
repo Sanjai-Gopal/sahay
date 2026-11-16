@@ -44,11 +44,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navItems = allNavItems.filter((item) => !item.companionOnly || isCompanion);
 
   return (
-    <aside className="w-[264px] shrink-0 bg-[#22403A] text-[#FBF7EE] p-6 hidden md:flex flex-col sticky top-0 h-screen">
+    <aside
+      aria-label="Sidebar navigation"
+      className="w-[264px] shrink-0 bg-[#22403A] text-[#FBF7EE] p-6 hidden md:flex flex-col sticky top-0 h-screen"
+    >
       {/* Brand */}
       <div className="flex items-center gap-3 px-1 pb-7">
         <div className="w-10 h-10 rounded-xl bg-[#E2A33D] text-[#152B26] flex items-center justify-center">
-          <Leaf className="w-5 h-5" />
+          <Leaf className="w-5 h-5" aria-hidden="true" />
         </div>
         <div>
           <div className="font-fraunces text-xl font-semibold tracking-wide">Sahay</div>
@@ -59,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Nav Links */}
-      <nav className="flex flex-col gap-1.5 mt-1">
+      <nav aria-label="Primary navigation" className="flex flex-col gap-1.5 mt-1">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentPage === item.id;
@@ -67,14 +70,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl font-baloo font-semibold text-sm transition-all cursor-pointer text-left w-full ${
+              aria-current={isActive ? 'page' : undefined}
+              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl font-baloo font-semibold text-sm transition-all cursor-pointer text-left w-full focus-visible:outline-2 focus-visible:outline-[#E2A33D] ${
                 isActive
                   ? 'bg-[#E2A33D]/18 text-[#E2A33D]'
                   : 'text-[#C9D6D0] hover:bg-white/5 hover:text-[#FBF7EE]'
               }`}
             >
-              <Icon className="w-4 h-4 opacity-90" />
-              {item.label}
+              <Icon className="w-4 h-4 opacity-90" aria-hidden="true" />
+              <span>{item.label}</span>
             </button>
           );
         })}
@@ -84,26 +88,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className="mt-auto pt-5 border-t border-white/10">
         <button
           onClick={onOpenSos}
-          className="w-full py-2.5 px-3 rounded-full bg-[#BD5B3B]/20 text-[#F0AF97] border border-[#BD5B3B]/40 font-baloo font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#BD5B3B]/30 cursor-pointer mb-3 relative overflow-hidden"
+          aria-label="Emergency SOS call trigger"
+          className="w-full py-2.5 px-3 rounded-full bg-[#BD5B3B]/20 text-[#F0AF97] border border-[#BD5B3B]/40 font-baloo font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#BD5B3B]/30 cursor-pointer mb-3 relative overflow-hidden focus-visible:outline-2 focus-visible:outline-[#BD5B3B]"
         >
-          <span className="w-2 h-2 rounded-full bg-[#BD5B3B] animate-ping" />
-          <Phone className="w-3.5 h-3.5" />
-          Emergency SOS
+          <span className="w-2 h-2 rounded-full bg-[#BD5B3B] animate-ping" aria-hidden="true" />
+          <Phone className="w-3.5 h-3.5" aria-hidden="true" />
+          <span>Emergency SOS</span>
         </button>
 
         <div className="flex items-center justify-between text-xs text-[#9FB4AC] px-3 py-2 bg-white/5 rounded-xl mb-3">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#6FCF97] shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-[#6FCF97] shrink-0" aria-hidden="true" />
             <span>Synced</span>
           </div>
           {onLogout && (
             <button
               type="button"
               onClick={onLogout}
-              className="text-[#C9D6D0] hover:text-[#E2A33D] flex items-center gap-1.5 cursor-pointer text-[11px] font-baloo font-bold transition-colors"
-              title="Logout"
+              aria-label="Log out of Sahay"
+              className="text-[#C9D6D0] hover:text-[#E2A33D] flex items-center gap-1.5 cursor-pointer text-[11px] font-baloo font-bold transition-colors focus-visible:outline-1 focus-visible:outline-[#E2A33D]"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Logout</span>
             </button>
           )}

@@ -83,6 +83,19 @@ export default function App() {
     if (fontSize === 'xlarge') document.body.classList.add('fs-xlarge');
   }, [fontSize]);
 
+  // Global Esc key listener for open modals & drawers (WCAG AA)
+  useEffect(() => {
+    const handleGlobalEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isSosModalOpen) setIsSosModalOpen(false);
+        else if (isVoiceModalOpen) setIsVoiceModalOpen(false);
+        else if (isMobileDrawerOpen) setIsMobileDrawerOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalEsc);
+    return () => window.removeEventListener('keydown', handleGlobalEsc);
+  }, [isSosModalOpen, isVoiceModalOpen, isMobileDrawerOpen]);
+
   const handleEnterPortal = (mode: PortalMode, role: UserRole) => {
     setPortalMode(mode);
     setUserRole(role);
@@ -187,6 +200,14 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-[#FBF7EE] text-[#221F1B]">
+      {/* WCAG AA Skip to Main Content Link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#22403A] focus:text-[#FBF7EE] focus:rounded-xl focus:shadow-xl focus:font-baloo focus:font-bold focus:outline-2 focus:outline-[#E2A33D]"
+      >
+        Skip to main content
+      </a>
+
       {/* Desktop Sticky Sidebar */}
       <Sidebar
         currentPage={currentPage}
@@ -222,7 +243,7 @@ export default function App() {
         />
 
         {/* Page Views */}
-        <main className="p-4 sm:p-7 md:p-8 flex-1">
+        <main id="main-content" role="main" tabIndex={-1} className="p-4 sm:p-7 md:p-8 flex-1 focus:outline-none">
           {currentPage === 'home' && (
             <HomeView
               reminders={reminders}

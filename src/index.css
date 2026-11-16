@@ -14,8 +14,8 @@
   --clay: #BD5B3B;
   --clay-tint: #F5E1D6;
   --ink: #221F1B;
-  --ink-soft: #665F51;
-  --ink-faint: #948C7A;
+  --ink-soft: #4F4A3F;
+  --ink-faint: #575246; /* Updated for WCAG AA compliance (> 5.5:1 contrast) */
   --line: #E6DAB9;
   --good: #3F7455;
   --shadow-sm: 0 2px 8px rgba(34,31,27,0.06);
@@ -58,6 +58,11 @@ body.fs-xlarge {
   background-color: var(--marigold-tint);
 }
 
+:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
 @keyframes memwave {
   0%, 100% { transform: scaleY(0.5); }
   50% { transform: scaleY(1); }
@@ -87,3 +92,13 @@ body.fs-xlarge {
 .animate-memwave-2 { animation: memwave 0.9s ease-in-out infinite 0.15s; }
 .animate-memwave-3 { animation: memwave 0.9s ease-in-out infinite 0.3s; }
 .animate-memwave-4 { animation: memwave 0.9s ease-in-out infinite 0.1s; }
+
+/* Elder-friendly vestibular sensitivity & accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

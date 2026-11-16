@@ -100,3 +100,56 @@ export interface ChatMessage {
   content: string;
   timestamp: string;
 }
+
+// -------------------------------------------------------------
+// Emergency SOS & Blood Donors Contracts
+// -------------------------------------------------------------
+export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'O+' | 'O-' | 'AB+' | 'AB-';
+
+export interface EmergencyDonorItem {
+  id: string;
+  name: string;
+  bloodGroup: BloodGroup;
+  phone: string;
+  distanceKm: number;
+  address: string;
+  status: 'available' | 'on-call' | 'busy';
+  lastDonated?: string;
+  verified: boolean;
+  role: 'Blood Donor' | 'Community Caregiver' | 'First Responder';
+}
+
+export interface EmergencyDonorFilters {
+  bloodGroup?: BloodGroup | 'ALL';
+  maxDistanceKm?: number;
+  status?: 'available' | 'on-call' | 'busy' | 'ALL';
+  searchQuery?: string;
+}
+
+export interface SosAlertResponse {
+  id: string;
+  status: 'dispatched' | 'cancelled';
+  contact: string;
+  phone: string;
+  location: string;
+  time: string;
+  message: string;
+  broadcastId: string;
+  etaMinutes: number;
+  reason?: string;
+}
+
+// -------------------------------------------------------------
+// Toast & Accessibility Feedback Contracts
+// -------------------------------------------------------------
+export type ToastType = 'success' | 'error' | 'warning' | 'info' | 'emergency';
+
+export interface ToastItem {
+  id?: string;
+  message: string;
+  type?: ToastType;
+  iconType?: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  durationMs?: number;
+}

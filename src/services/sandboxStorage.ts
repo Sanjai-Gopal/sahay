@@ -8,7 +8,7 @@
  * - Can be reset to defaults at any time in Settings.
  */
 
-import { ReminderItem, AppointmentItem, FamilyMemberItem, ZoneEventItem } from '../types';
+import { ReminderItem, AppointmentItem, FamilyMemberItem, ZoneEventItem, EmergencyDonorItem } from '../types';
 
 const STORAGE_KEY_PREFIX = 'sahay_sandbox_v1_';
 
@@ -90,6 +90,105 @@ export const DEFAULT_ZONE_EVENTS: ZoneEventItem[] = [
   { id: '4', type: 'enter', label: 'Returned home', time: 'Yesterday, 6:48 PM' },
 ];
 
+export const DEFAULT_DONORS: EmergencyDonorItem[] = [
+  {
+    id: 'donor-1',
+    name: 'Dr. Bhaskar Jyoti Hazarika',
+    bloodGroup: 'O+',
+    phone: '+91 94350 11223',
+    distanceKm: 1.2,
+    address: 'Club Road, Jorhat, Assam',
+    status: 'available',
+    lastDonated: '3 months ago',
+    verified: true,
+    role: 'Blood Donor',
+  },
+  {
+    id: 'donor-2',
+    name: 'Anamika Saikia',
+    bloodGroup: 'A+',
+    phone: '+91 98640 44556',
+    distanceKm: 2.5,
+    address: 'Tarajan, Jorhat, Assam',
+    status: 'available',
+    lastDonated: '1 month ago',
+    verified: true,
+    role: 'Community Caregiver',
+  },
+  {
+    id: 'donor-3',
+    name: 'Debojit Barua',
+    bloodGroup: 'B+',
+    phone: '+91 97060 77889',
+    distanceKm: 3.1,
+    address: 'Boruah Chariali, Jorhat, Assam',
+    status: 'on-call',
+    lastDonated: '4 months ago',
+    verified: true,
+    role: 'First Responder',
+  },
+  {
+    id: 'donor-4',
+    name: 'Jahnavi Das',
+    bloodGroup: 'O-',
+    phone: '+91 94355 99001',
+    distanceKm: 4.8,
+    address: 'Gar-Ali, Jorhat, Assam',
+    status: 'available',
+    lastDonated: '5 months ago',
+    verified: true,
+    role: 'Blood Donor',
+  },
+  {
+    id: 'donor-5',
+    name: 'Bikramjit Sharma',
+    bloodGroup: 'AB+',
+    phone: '+91 98642 33445',
+    distanceKm: 5.4,
+    address: 'Kenduguri, Jorhat, Assam',
+    status: 'available',
+    lastDonated: '2 months ago',
+    verified: true,
+    role: 'Blood Donor',
+  },
+  {
+    id: 'donor-6',
+    name: 'Manash Pratim Gogoi',
+    bloodGroup: 'A-',
+    phone: '+91 97061 55667',
+    distanceKm: 6.2,
+    address: 'Cinnamara, Jorhat, Assam',
+    status: 'busy',
+    lastDonated: '2 weeks ago',
+    verified: true,
+    role: 'First Responder',
+  },
+  {
+    id: 'donor-7',
+    name: 'Kavita Basumatary',
+    bloodGroup: 'B-',
+    phone: '+91 94351 22334',
+    distanceKm: 7.0,
+    address: 'Mariani Road, Jorhat, Assam',
+    status: 'available',
+    lastDonated: '6 months ago',
+    verified: true,
+    role: 'Community Caregiver',
+  },
+  {
+    id: 'donor-8',
+    name: 'Tsering Lhamo',
+    bloodGroup: 'AB-',
+    phone: '+91 98649 88776',
+    distanceKm: 8.5,
+    address: 'Jail Road, Jorhat, Assam',
+    status: 'on-call',
+    lastDonated: '4 months ago',
+    verified: true,
+    role: 'Blood Donor',
+  },
+];
+
 function load<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_PREFIX + key);
@@ -144,11 +243,19 @@ export const sandboxStorage = {
     save('linked_elders', elders);
   },
 
+  getDonors(): EmergencyDonorItem[] {
+    return load<EmergencyDonorItem[]>('donors', DEFAULT_DONORS);
+  },
+  saveDonors(donors: EmergencyDonorItem[]): void {
+    save('donors', donors);
+  },
+
   resetAll(): void {
     save('reminders', DEFAULT_REMINDERS);
     save('appointments', DEFAULT_APPOINTMENTS);
     save('family', DEFAULT_FAMILY);
     save('safety', { radius: 500, events: DEFAULT_ZONE_EVENTS });
     save('linked_elders', DEFAULT_ELDERS);
+    save('donors', DEFAULT_DONORS);
   },
 };

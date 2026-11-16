@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Clock, Plus, Search, Check, Pill, Droplet, Activity, Calendar } from 'lucide-react';
-import { ReminderItem } from '../../types';
+import { ReminderItem, ToastType } from '../../types';
 
 interface RemindersViewProps {
   reminders: ReminderItem[];
   onToggle: (id: string) => void;
   onAdd: (txt: string, time: string) => void;
-  showToast: (msg: string, icon?: string) => void;
+  showToast: (msg: string, icon?: string, type?: ToastType) => void;
 }
 
 export const RemindersView: React.FC<RemindersViewProps> = ({
@@ -27,14 +27,14 @@ export const RemindersView: React.FC<RemindersViewProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newText.trim()) {
-      showToast('Type a reminder first', 'alert');
+      showToast('Please type a reminder description first', 'alert', 'error');
       return;
     }
     onAdd(newText.trim(), newTime.trim() || 'Anytime');
     setNewText('');
     setNewTime('');
     setIsFormOpen(false);
-    showToast('Reminder added', 'plus');
+    showToast('Reminder added successfully', 'check', 'success');
   };
 
   const getIcon = (iconName: string) => {

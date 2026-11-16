@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageId, ActivityId, SupportedLanguage, TextScale, ReminderItem, AppointmentItem, FamilyMemberItem, ZoneEventItem, UserRole, PortalMode } from './types';
+import { PageId, ActivityId, SupportedLanguage, TextScale, ReminderItem, AppointmentItem, FamilyMemberItem, ZoneEventItem, UserRole, PortalMode, ToastType } from './types';
 import { api } from './services/api';
 import { Sidebar } from './components/layout/Sidebar';
 import { Topbar } from './components/layout/Topbar';
@@ -46,15 +46,27 @@ export default function App() {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
 
   // Toast
-  const [toast, setToast] = useState<{ message: string | null; iconType?: string }>({
+  const [toast, setToast] = useState<{
+    message: string | null;
+    iconType?: string;
+    type?: ToastType;
+    actionLabel?: string;
+    onAction?: () => void;
+  }>({
     message: null,
   });
 
-  const showToast = (message: string, iconType?: string) => {
-    setToast({ message, iconType });
+  const showToast = (
+    message: string,
+    iconType?: string,
+    type?: ToastType,
+    actionLabel?: string,
+    onAction?: () => void
+  ) => {
+    setToast({ message, iconType, type, actionLabel, onAction });
     setTimeout(() => {
       setToast({ message: null });
-    }, 2800);
+    }, 3200);
   };
 
   const loadAppData = async () => {
@@ -369,7 +381,14 @@ export default function App() {
       />
 
       {/* Global Floating Toast */}
-      <Toast message={toast.message} iconType={toast.iconType} />
+      <Toast
+        message={toast.message}
+        iconType={toast.iconType}
+        type={toast.type}
+        actionLabel={toast.actionLabel}
+        onAction={toast.onAction}
+        onDismiss={() => setToast({ message: null })}
+      />
     </div>
   );
 }

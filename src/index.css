@@ -97,3 +97,29 @@ body.fs-xlarge {
 .animate-memwave-2 { animation: memwave 0.9s ease-in-out infinite 0.15s; }
 .animate-memwave-3 { animation: memwave 0.9s ease-in-out infinite 0.3s; }
 .animate-memwave-4 { animation: memwave 0.9s ease-in-out infinite 0.1s; }
+
+/* Print & PDF Export Styling for Clinical Reports (Issue #11) */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+  aside,
+  nav,
+  header,
+  #topbar,
+  #mobile-bottom-nav,
+  .print\:hidden {
+    display: none !important;
+  }
+  #clinical-summary-printable {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  @page {
+    margin: 1.2cm;
+    size: portrait;
+  }
+}

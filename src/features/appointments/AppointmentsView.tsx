@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Calendar, Plus } from 'lucide-react';
+import { Calendar, Plus, FileText } from 'lucide-react';
 import { AppointmentItem } from '../../types';
+import { ClinicalSummaryModal } from '../family/ClinicalSummaryModal';
 
 interface AppointmentsViewProps {
   appointments: AppointmentItem[];
@@ -14,6 +15,7 @@ export const AppointmentsView: React.FC<AppointmentsViewProps> = ({
   showToast,
 }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
@@ -50,13 +52,22 @@ export const AppointmentsView: React.FC<AppointmentsViewProps> = ({
         <h2 className="font-fraunces text-2xl md:text-3xl font-medium text-[#221F1B]">
           Upcoming Appointments
         </h2>
-        <button
-          onClick={() => setIsFormOpen(!isFormOpen)}
-          className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#E6DAB9] bg-white text-[#221F1B] font-baloo font-bold text-xs hover:border-[#22403A] transition-colors cursor-pointer"
-        >
-          <Plus className="w-4 h-4" />
-          Add appointment
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsReportOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#22403A] bg-[#22403A] text-white font-baloo font-bold text-xs hover:bg-[#152B26] transition-colors cursor-pointer shadow-xs active:scale-95"
+          >
+            <FileText className="w-3.5 h-3.5 text-[#E2A33D]" />
+            Doctor Report (PDF)
+          </button>
+          <button
+            onClick={() => setIsFormOpen(!isFormOpen)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#E6DAB9] bg-white text-[#221F1B] font-baloo font-bold text-xs hover:border-[#22403A] transition-colors cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            Add appointment
+          </button>
+        </div>
       </div>
 
       {isFormOpen && (
@@ -130,6 +141,12 @@ export const AppointmentsView: React.FC<AppointmentsViewProps> = ({
           </div>
         ))}
       </div>
+
+      {/* Printable Clinical Summary Modal (Issue #11) */}
+      <ClinicalSummaryModal
+        isOpen={isReportOpen}
+        onClose={() => setIsReportOpen(false)}
+      />
     </div>
   );
 };

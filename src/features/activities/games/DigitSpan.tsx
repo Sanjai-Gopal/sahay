@@ -59,9 +59,19 @@ export const DigitSpan: React.FC<DigitSpanProps> = ({ onSessionComplete, showToa
     return digits;
   };
 
-  const startRound = () => {
-    const newSeq = generateSequence(sequenceLength);
+  const startRound = (targetLevel?: number) => {
+    const activeLevel = targetLevel ?? level;
+    const isRev = activeLevel >= 4;
+    const len = isRev ? activeLevel - 1 : activeLevel + 2;
+    const newSeq = generateSequence(len);
     setSequence(newSeq);
+    setUserInput([]);
+    setIsCorrect(null);
+    setCurrentDigitIndex(0);
+    setPhase('showing');
+  };
+
+  const retryRound = () => {
     setUserInput([]);
     setIsCorrect(null);
     setCurrentDigitIndex(0);
@@ -133,16 +143,16 @@ export const DigitSpan: React.FC<DigitSpanProps> = ({ onSessionComplete, showToa
   };
 
   const handleNextRound = () => {
-    if (isCorrect) {
-      if (level < 6) {
-        setLevel((prev) => prev + 1);
-      } else {
-        // Complete full 6-level session
-        finishSession();
-        return;
-      }
+    if (!isCorrect) return;
+
+    if (level < 6) {
+      const nextLevel = level + 1;
+      setLevel(nextLevel);
+      startRound(nextLevel);
+    } else {
+      // Complete full 6-level session
+      finishSession();
     }
-    startRound();
   };
 
   const finishSession = () => {
@@ -183,7 +193,7 @@ export const DigitSpan: React.FC<DigitSpanProps> = ({ onSessionComplete, showToa
           </div>
 
           <button
-            onClick={startRound}
+            onClick={() => startRound(1)}
             className="w-full py-3.5 rounded-2xl bg-[#22403A] text-white font-baloo font-bold text-sm hover:brightness-110 cursor-pointer shadow-md flex items-center justify-center gap-2"
           >
             <Play className="w-4 h-4" />
@@ -319,20 +329,35 @@ export const DigitSpan: React.FC<DigitSpanProps> = ({ onSessionComplete, showToa
           </p>
 
           <div className="flex gap-2 max-w-[280px] mx-auto">
-            <button
-              onClick={startRound}
-              className="flex-1 py-2.5 rounded-xl border border-[#E6DAB9] font-baloo font-bold text-xs text-[#221F1B] hover:bg-[#F1E7CE] cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Try Again
-            </button>
-            <button
-              onClick={handleNextRound}
-              className="flex-1 py-2.5 rounded-xl bg-[#22403A] text-white font-baloo font-bold text-xs hover:brightness-110 cursor-pointer flex items-center justify-center gap-1.5"
-            >
-              <span>{level < 6 ? 'Next Level' : 'Finish Session'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            {!isCorrect ? (
+              <button
+                type="button"
+                onClick={retryRound}
+                className="w-full py-2.5 rounded-xl bg-[#22403A] text-white font-baloo font-bold text-xs hover:brightness-110 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Try Again</span>
+              </button>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={retryRound}
+                  className="flex-1 py-2.5 rounded-xl border border-[#E6DAB9] font-baloo font-bold text-xs text-[#221F1B] hover:bg-[#F1E7CE] cursor-pointer flex items-center justify-center gap-1.5"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Replay</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextRound}
+                  className="flex-1 py-2.5 rounded-xl bg-[#22403A] text-white font-baloo font-bold text-xs hover:brightness-110 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+                >
+                  <span>{level < 6 ? 'Next Level' : 'Finish Session'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
